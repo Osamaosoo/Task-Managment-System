@@ -1,6 +1,11 @@
+C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\Command\AddTaskCommand.java
+C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\Command\Command.java
+C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\Command\DeleteTaskCommand.java
+C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\Command\MarkCompletedTaskCommand.java
 C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\controller\TaskController.java
 C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\gui\TaskManagementGUI.java
 C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\gui\TaskView.java
+C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\model\Observer1.java
 C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\model\Task.java
 C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\model\TaskFactory.java
 C:\Users\TOP\Documents\NetBeansProjects\TaskManagementSystem\src\main\java\model\TaskManager.java

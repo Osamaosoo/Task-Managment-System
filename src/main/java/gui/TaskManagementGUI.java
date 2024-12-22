@@ -3,6 +3,7 @@ package gui;
 import model.Task;
 import model.TaskManager;
 import controller.TaskController;
+import model.Observer1;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,7 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TaskManagementGUI extends JFrame {
+public class TaskManagementGUI extends JFrame implements Observer1 {  // استخدام observer1 بدلاً من Observer
 
     private TaskManager taskManager;
     private TaskController controller;
@@ -28,7 +29,6 @@ public class TaskManagementGUI extends JFrame {
         taskManager = TaskManager.getInstance();
         controller = new TaskController(taskManager);
 
-        // تغيير مظهر الواجهة
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -40,7 +40,6 @@ public class TaskManagementGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // إضافة شريط أدوات
         JPanel toolbar = new JPanel();
         toolbar.setLayout(new FlowLayout());
 
@@ -53,7 +52,6 @@ public class TaskManagementGUI extends JFrame {
         deleteButton = new JButton("Delete Task");
         markCompletedButton = new JButton("Mark Completed");
 
-        // ألوان مخصصة للأزرار
         addButton.setBackground(Color.GREEN);
         deleteButton.setBackground(Color.RED);
         markCompletedButton.setBackground(Color.CYAN);
@@ -61,7 +59,6 @@ public class TaskManagementGUI extends JFrame {
         searchField = new JTextField(20);
         searchField.setToolTipText("Search for tasks");
 
-        // إضافة أزرار إلى شريط الأدوات
         toolbar.add(new JLabel("Task Name:"));
         toolbar.add(taskNameField);
         toolbar.add(new JLabel("Description:"));
@@ -74,13 +71,11 @@ public class TaskManagementGUI extends JFrame {
 
         add(toolbar, BorderLayout.NORTH);
 
-        // إعداد جدول المهام
         tableModel = new DefaultTableModel(new Object[]{"Task Name", "Description", "Status"}, 0);
         taskTable = new JTable(tableModel);
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(new JScrollPane(taskTable), BorderLayout.CENTER);
 
-        // إضافة ActionListener للأزرار
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,13 +109,12 @@ public class TaskManagementGUI extends JFrame {
                 int selectedRow = taskTable.getSelectedRow();
                 if (selectedRow != -1) {
                     Task task = taskManager.getTasks().get(selectedRow);
-                    task.markComplete();
-                    updateTaskTable();
+                    task.markComplete();  // تحديث حالة المهمة
+                    updateTaskTable();  // تحديث الجدول بعد التعديل
                 }
             }
         });
 
-        // إضافة ميزة البحث
         searchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent e) {
                 String query = searchField.getText().toLowerCase();
@@ -128,25 +122,31 @@ public class TaskManagementGUI extends JFrame {
             }
         });
 
+        // تسجيل observer1 في TaskManager
+        taskManager.addObserver(this);
+
         setVisible(true);
     }
 
-    // تحديث الجدول بعد أي تعديل
     private void updateTaskTable() {
-        tableModel.setRowCount(0); // مسح البيانات السابقة
+        tableModel.setRowCount(0);  // مسح البيانات القديمة
         for (Task task : taskManager.getTasks()) {
             tableModel.addRow(new Object[]{task.getName(), task.getDescription(), task.isCompleted() ? "Completed" : "Pending"});
         }
     }
 
-    // البحث في المهام
     private void searchTasks(String query) {
-        tableModel.setRowCount(0); // مسح البيانات السابقة
+        tableModel.setRowCount(0);  // مسح البيانات القديمة
         for (Task task : taskManager.getTasks()) {
             if (task.getName().toLowerCase().contains(query) || task.getDescription().toLowerCase().contains(query)) {
                 tableModel.addRow(new Object[]{task.getName(), task.getDescription(), task.isCompleted() ? "Completed" : "Pending"});
             }
         }
+    }
+
+    @Override
+    public void update() {
+        updateTaskTable();
     }
 
     public static void main(String[] args) {
